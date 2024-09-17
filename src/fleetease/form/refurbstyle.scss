@@ -1,0 +1,22 @@
+.form-container {
+  background-color: #f0f0f0; /* Light grey background */
+  padding: 20px; /* Padding around the form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for a subtle 3D effect */
+}
+
+.form-space {
+  margin-bottom: 20px; /* Adjust as needed for spacing */
+}
+
+.car-options .form-check {
+  margin-bottom: 10px; /* Adjust as needed for spacing between checkboxes */
+}
+
+.car-options .form-check-input {
+  margin-right: 10px;
+}
+
+.car-options .form-check-label {
+  margin-bottom: 0; /* Ensures no extra spacing below labels */
+}

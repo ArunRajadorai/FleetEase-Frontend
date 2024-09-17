@@ -1,0 +1,42 @@
+/*--------------------------------------------*/
+/* Customer Profile Card */
+/*--------------------------------------------*/
+
+.customer-profile-card {
+  padding: 15px;
+  background-color: #f8f9fa; /* Light background color */
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 300px; /* Small card size */
+  margin: 0 auto; /* Center the card */
+}
+
+.customer-profile-card .customer-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.customer-profile-card .customer-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.customer-profile-card .customer-mobile,
+.customer-profile-card .customer-email {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+  .customer-profile-card {
+    max-width: 100%;
+    padding: 10px;
+  }
+}
