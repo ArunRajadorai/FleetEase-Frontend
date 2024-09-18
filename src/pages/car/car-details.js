@@ -19,7 +19,6 @@ import TabsPGS from '../../component/tabs/tabs';
 // Template
 import CarDetailsGeneralInformation from '../../template/car-detail-general-information';
 
-
 // Form
 import EnquiryForm from '../../form/enquiry-form';
 
@@ -30,29 +29,30 @@ import { SocialInfo03 } from '../../widget/social-info/social-info';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import apiConfig from '../../fleetease/configs'
+import apiConfig from '../../fleetease/configs';
 // Components
 import ChatPopup from '../../fleetease/components/chat/ChatPopup';
 
 function CarDetails() {
   const { id } = useParams();
-  console.log("here goes ::",id)
+  console.log("here goes ::",id);
   const [carData, setCarData] = useState(null);
   const [showModal, setShowModal] = useState(null);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
-
-
-
+  //const [userId, setUserId] = useState(null);
+  const userId = sessionStorage.getItem("userId");// Assuming you have a way to get the user ID
 
   useEffect(() => {
+    // Example to set user ID, you might want to fetch it or get it from auth context
+    //setUserId('exampleUserId'); // Replace with actual user ID logic
+
     axios.get(`${apiConfig.VEHICLE_FETCH}/${id}`)
       .then(response => {
         if (response.data.success) {
           const data = response.data.data;
-          console.log("here goes ::",data)
-          // Ensure img_src is parsed if it's a JSON string
+          console.log("here goes ::",data);
           const gallery = JSON.parse(data.img_src || '[]');
 
           setCarData({
@@ -69,15 +69,37 @@ function CarDetails() {
       });
   }, [id]);
 
-  // const handleChatWithSeller = () => {
-  //   navigate(`/chat?sellerId=${carData.seller_id}&vehicleName=${(carData.vehicle_name)}`);
-  // };
   const handleChatWithSeller = () => {
     setShowChat(true);
   };
 
   const closeChatPopup = () => {
     setShowChat(false);
+  };
+
+  const handlePurchase = () => {
+    if (!userId) {
+      alert('User not logged in. Please log in to make a purchase.');
+      return;
+    }
+
+    axios.post(`${apiConfig.PURCHASE_URL}`, {
+      vehicleId: id,
+      userId: userId,
+    })
+      .then(response => {
+        if (response.data.success) {
+          alert('Purchase successful!');
+          // Optionally, navigate to a confirmation page or refresh the page
+          //navigate('/purchase-confirmation');
+        } else {
+          alert('Purchase failed. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('An error occurred while processing the purchase:', error);
+        alert('An error occurred. Please try again.');
+      });
   };
 
   if (!carData) return <div>Loading...</div>;
@@ -116,36 +138,6 @@ function CarDetails() {
                   </div>
                   <span>Plus Taxes & Licensing</span>
                 </Col>
-              </Row>
-              <Row>
-                {/*<Col md={12}>*/}
-                {/*  <div className="details-nav">*/}
-                {/*    <ul className="list-unstyled">*/}
-                {/*      {carData.leadForm.map((modal, index) => (*/}
-                {/*        <li key={index}>*/}
-                {/*          <Link onClick={() => openModal(modal.id)}>*/}
-                {/*            <i className={modal.icon}></i>*/}
-                {/*            {modal.title}*/}
-                {/*          </Link>*/}
-                {/*        </li>*/}
-                {/*      ))}*/}
-                {/*    </ul>*/}
-                {/*    {carData.leadForm.map((modal, index) => (*/}
-                {/*      <Modal*/}
-                {/*        size={modal.size}*/}
-                {/*        className="car-details-model"*/}
-                {/*        show={showModal === modal.id}*/}
-                {/*        onHide={closeModal}*/}
-                {/*        key={index}*/}
-                {/*      >*/}
-                {/*        <Modal.Header closeButton>*/}
-                {/*          <Modal.Title>{modal.title}</Modal.Title>*/}
-                {/*        </Modal.Header>*/}
-                {/*        <Modal.Body>{modal.form}</Modal.Body>*/}
-                {/*      </Modal>*/}
-                {/*    ))}*/}
-                {/*  </div>*/}
-                {/*</Col>*/}
               </Row>
               <Row>
                 <Col lg={8} md={7}>
@@ -192,7 +184,7 @@ function CarDetails() {
                       tabsTitle={[
                         { id: 1, title: 'General Information' },
                         // { id: 2, title: 'Features & Options' },
-                       // { id: 3, title: 'Vehicle Overview' },
+                        // { id: 3, title: 'Vehicle Overview' },
                       ]}
                       tabsContent={[
                         {id: 31,content: (<CarDetailsGeneralInformation description={carData.description}
@@ -203,48 +195,16 @@ function CarDetails() {
                       ]}
                     />
                   </div>
-                        {/* Chat with Seller Button */}
                   <div className="chat-button-container">
                     <button className="chat-button button red border-0" onClick={handleChatWithSeller}>
                       Chat with Seller
                     </button>
                   </div>
-                  {/*<div className="feature-car">*/}
-                  {/*  <h6>Recently Added Vehicles</h6>*/}
-                  {/*  <Swiper*/}
-                  {/*    modules={[Navigation, A11y]}*/}
-                  {/*    navigation*/}
-                  {/*    spaceBetween={15}*/}
-                  {/*    slidesPerView={3}*/}
-                  {/*    loop={true}*/}
-                  {/*    breakpoints={{*/}
-                  {/*      0: { slidesPerView: 1 },*/}
-                  {/*      400: { slidesPerView: 1 },*/}
-                  {/*      570: { slidesPerView: 2 },*/}
-                  {/*      768: { slidesPerView: 2 },*/}
-                  {/*      992: { slidesPerView: 3 },*/}
-                  {/*    }}*/}
-                  {/*  >*/}
-                  {/*    {carData.map((val, index) => (*/}
-                  {/*      <SwiperSlide key={index}>*/}
-                  {/*        <VehicleShowcase1*/}
-                  {/*          className="bg-light recent-slid"*/}
-                  {/*          imgSrc={val.imgSrc}*/}
-                  {/*          carName={val.vehicle_name}*/}
-                  {/*          carPrice={val.regular_price}*/}
-                  {/*          carNewPrice={val.sale_price}*/}
-                  {/*          registrationDate={val.year}*/}
-                  {/*          transmission={val.transmission}*/}
-                  {/*          mileage={val.mileage}*/}
-                  {/*          list={val.review}*/}
-                  {/*          id={val.id}*/}
-                  {/*          attri={val.attributes}*/}
-                  {/*          lightboxImages={val.gallery}*/}
-                  {/*        />*/}
-                  {/*      </SwiperSlide>*/}
-                  {/*    ))}*/}
-                  {/*  </Swiper>*/}
-                {/*  </div>*/}
+                  <div className="purchase-button-container" style={{ marginTop: '15px' }}>
+                    <button className="purchase-button button green border-0" onClick={handlePurchase}>
+                      Purchase
+                    </button>
+                  </div>
                 </Col>
                 <Col lg={4} md={5}>
                   <div className="car-details-sidebar">
@@ -269,8 +229,7 @@ function CarDetails() {
                     </div>
                     <div className="details-form details-weight">
                       <h5 className="weight-title">Send Enquiry</h5>
-                      <EnquiryForm sellerId={carData.user_id}
-                        vehicleName={carData.vehicle_name} />
+                      <EnquiryForm sellerId={carData.user_id} vehicleName={carData.vehicle_name} />
                     </div>
                     <div className="details-phone details-weight">
                       <FeatureInfo
@@ -281,13 +240,13 @@ function CarDetails() {
                       />
                     </div>
                   </div>
-                    {showChat && (
-                      <ChatPopup
-                        sellerId={carData.user_id}
-                        vehicleName={carData.vehicle_name}
-                        onClose={closeChatPopup}
-                      />
-                    )}
+                  {showChat && (
+                    <ChatPopup
+                      sellerId={carData.user_id}
+                      vehicleName={carData.vehicle_name}
+                      onClose={closeChatPopup}
+                    />
+                  )}
                 </Col>
               </Row>
             </Container>

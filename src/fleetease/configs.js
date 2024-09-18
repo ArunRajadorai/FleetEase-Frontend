@@ -7,6 +7,7 @@ const BUYER_VEHICLES = `${API_BASE_URL}/vehicle/buyer-vehicles`;
 const REFURB_REQUEST = `${API_BASE_URL}/refurb/create-refurbishment`;
 const ADD_VEHICLE_URL= `${API_BASE_URL}/vehicle/create_vehicle`;
 const GET_VEHICLE_URL= `${API_BASE_URL}/vehicle/vehicles`;
+const PURCHASE_URL= `${API_BASE_URL}/vehicle/purchase_vehicle`;
 const GET_CUSTOMER_DETAILS = `${API_BASE_URL}/user/get-details`;
 const GET_CUSTOMER_VEHICLE_DETAILS = `${API_BASE_URL}/user/get-uservehicles`;
 const SEARCH_FILTER = `${API_BASE_URL}/vehicle/filter-vehicles`;
@@ -28,7 +29,8 @@ const apiConfig = {
   CHAT_API,
   ENQUIRY_API,
   LOGIN_API,
-  REGISTER_API
+  REGISTER_API,
+  PURCHASE_URL
 };
 
 export default apiConfig;
